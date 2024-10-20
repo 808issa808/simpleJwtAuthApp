@@ -1,38 +1,42 @@
 package com.example.jwtauthapp.controller;
 
-import com.example.jwtauthapp.security.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.jwtauthapp.DTOs.CredentialsDTO;
+import com.example.jwtauthapp.service.AuthService;
+import lombok.RequiredArgsConstructor;
 
-import java.security.Principal;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
-@Autowired
-    JwtService service;
+
+
+    private final AuthService authService;
+
     @PostMapping("/login")
-    public String login() {
-        return "hi";
+    public ResponseEntity<String> login(@RequestBody CredentialsDTO dto) {
+        System.out.println(dto);
+        String token = authService.login(dto);
+        return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/in")
-    public String in() {
-        return "hi";
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody CredentialsDTO dto) {
+
+        System.out.println(dto.toString());
+        authService.register(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully registered");
     }
 
-    @PreAuthorize("hasAnyAuthority('admin')")
-    @GetMapping("/some")
-    public String some(@AuthenticationPrincipal UserDetails principal) {
-        System.out.println(principal.getUsername());
-        String token= service.generateToken(principal);
-        System.out.println(service.extractUserName(token));
-        return token;
+    @GetMapping("/secured")
+    public ResponseEntity<String> secured() {
+
+        return ResponseEntity.ok("passed sec check");
     }
+
+
 }

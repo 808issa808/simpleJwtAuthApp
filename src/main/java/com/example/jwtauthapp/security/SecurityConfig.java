@@ -1,7 +1,6 @@
 package com.example.jwtauthapp.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -23,8 +22,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-@Autowired
-    JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;
     private final CustomUserDetailsService userDetailsService;
 
     @Bean
@@ -42,12 +40,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).authorizeRequests(req -> req.requestMatchers("/auth/login").permitAll().anyRequest().authenticated())
+        http.csrf(AbstractHttpConfigurer::disable).
+
+                authorizeRequests(req -> req.requestMatchers("/auth/login","/auth/signup").permitAll()
+                        .anyRequest().authenticated())
 
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(authenticationProvider()).httpBasic(Customizer.withDefaults());
+
+                .authenticationProvider(authenticationProvider())
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
