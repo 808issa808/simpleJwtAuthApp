@@ -1,5 +1,7 @@
 package com.example.jwtauthapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -20,12 +22,15 @@ public class User {
     private String username;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonManagedReference
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    @ToString.Exclude // Исключаем поле из метода toString для предотвращения рекурсии
+    @ToString.Exclude
+    @JsonManagedReference
     private List<Post> posts;
 }

@@ -1,11 +1,11 @@
 package com.example.jwtauthapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
@@ -21,7 +21,9 @@ public class Post {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch =FetchType.LAZY)
+    @ToString.Exclude // Исключаем поле из метода toString для предотвращения рекурсии
     @JoinColumn(name = "author_id")
+    @JsonBackReference
     private User author;
 
 }
