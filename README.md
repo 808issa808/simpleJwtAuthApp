@@ -1,2 +1,3 @@
-This is rest app meant to be learning jwt auth abilies with spring. Here we have basic as well as jwt auth.
-Obviously session is stateless, we have custom userdetails and userdetailsService respectivly.
+Этот REST-приложение предназначено для изучения возможностей аутентификации с помощью JWT в Spring. Мы реализовали как базовую аутентификацию, так и аутентификацию с использованием JWT. Очевидно, что сессия является stateless. У нас также есть кастомные UserDetails и UserDetailsService. Кроме того, помимо конечных точек /auth/login и /auth/signup, у нас есть конечная точка /my_posts, которая возвращает список постов аутентифицированного пользователя.
+
+This REST application is designed to explore authentication capabilities using JWT in Spring. We have implemented both basic authentication and JWT-based authentication. As expected, the session is stateless. We also have custom UserDetails and UserDetailsService. In addition to the /auth/login and /auth/signup endpoints, we have the /my_posts endpoint, which returns a list of posts for the authenticated user.
